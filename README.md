@@ -43,6 +43,10 @@ Technical Details
 * Apache 2
 * PHP 5.3
 * MySQL 5.5
+* R 
+	* Packages
+	* ggplot2
+	* pheatmap
 
 * HTTP port: 8888 (i.e. <http://localhost:8888>)
 * MySQL port: 8889
