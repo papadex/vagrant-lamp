@@ -1,7 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant::Config.run do |config|
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
@@ -11,7 +13,7 @@ Vagrant::Config.run do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   # Boot with a GUI so you can see the screen. (Default is headless)
-  # config.vm.boot_mode = :gui
+  #config.vm.boot_mode = :gui
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
@@ -26,13 +28,33 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 8888
-  config.vm.forward_port 3306, 8889
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 3306, host: 8089
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  config.vm.share_folder "htdocs", "/var/www", "htdocs"
+  #config.vm.share_folder "htdocs", "/var/www", "htdocs"
+  config.vm.synced_folder "htdocs", "/var/www"
+
+  #guest additions
+  config.vbguest.auto_update = true
+
+  #gui
+  config.ssh.forward_agent = true
+  config.ssh.forward_x11 = true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = true
+ 
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+    #vb.customize ["modifyvm", :id, "--graphicscontroller", "vboxvga"]
+    vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--vram", "128"]
+    vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
+  end
 
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
@@ -56,6 +78,9 @@ Vagrant::Config.run do |config|
 	chef.add_recipe "apache2::mod_rewrite"
 	chef.add_recipe "lamp"
 	chef.add_recipe "r"
+  chef.add_recipe "desktop_env"
+  chef.add_recipe "emacs24-ppa"
+  #chef.add_repice "BE_Settings"
 
 	chef.json = {
 		:apache => {

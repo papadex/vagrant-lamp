@@ -1,0 +1,8 @@
+maintainer        "Brian E"
+maintainer_email  "private@private.com"
+license           "Apache 2.0"
+description       "Install emacs, copy emacs directory"
+version           "0.1"
+depends           "apt"
+supports          "ubuntu"
+recipe            "emacs", "Install emacs, copy emacs directory"
