@@ -80,7 +80,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	chef.add_recipe "r"
   chef.add_recipe "desktop_env"
   chef.add_recipe "emacs24-ppa"
-  #chef.add_repice "BE_Settings"
+  #chef.add_recipe "BE_Settings"
+  chef.add_recipe "python"
 
 	chef.json = {
 		:apache => {
