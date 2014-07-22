@@ -20,7 +20,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar my-packages '(lua-mode markdown-mode ido-ubiquitous ess ruby-tools ruby-mode
+(defvar my-packages '(exec-path-from-shell lua-mode markdown-mode ido-ubiquitous ess ruby-tools ruby-mode
                       ruby-end inf-ruby flymake flymake-ruby flymake-shell
                       org-magit auctex clojure-mode coffee-mode
                       jabber jira deft gist haml-mode haskell-mode
@@ -47,3 +47,14 @@
 ;; Require packages in modules/
 (mapc 'load (directory-files module-dir nil "^[^#].*el$"))
 (server-start)
+
+;; Fix shell on mac
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+;;setup a reasonable size window
+(defun custom-set-frame-size ()
+  (add-to-list 'default-frame-alist '(height . 53))
+  (add-to-list 'default-frame-alist '(width . 145)))
+(custom-set-frame-size)
+(add-hook 'before-make-frame-hook 'custom-set-frame-size)
